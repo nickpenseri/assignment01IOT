@@ -7,6 +7,8 @@
 #define THIRD_GREEN_PIN 12
 #define FOURTH_GREEN_PIN 13
 
+#define LEDS_NUMBER 4
+
 #define FIRST_BUTTON_PIN 2
 #define SECOND_BUTTON_PIN 3
 #define THIRD_BUTTON_PIN 4
