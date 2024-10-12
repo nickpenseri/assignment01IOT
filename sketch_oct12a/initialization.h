@@ -19,5 +19,6 @@
 #define STANDBY_TIME 10000
 #define MAX_NUMBER 15
 #define T1_TIMER 20000
+typedef enum States{START, SLEEP, GAME } state; 
 
 #endif
