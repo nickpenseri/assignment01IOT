@@ -3,6 +3,7 @@
 #include "initialization.h"
 #include "start.h"
 #include "game.h"
+#include "interrupt.h"
 
 int green_led_pin[] = { FOURTH_GREEN_PIN, THIRD_GREEN_PIN, SECOND_GREEN_PIN, FIRST_GREEN_PIN };
 int button_pin[] = { FOURTH_BUTTON_PIN, THIRD_BUTTON_PIN, SECOND_BUTTON_PIN, FIRST_BUTTON_PIN };
@@ -12,7 +13,7 @@ int fading_Amount;
 int brightness;
 int count;
 volatile state actualState;
-int actualNumber;
+
 void redFading() {
   brightness += fading_Amount;
   analogWrite(RED_PIN, brightness);
@@ -34,7 +35,7 @@ void setup() {
   Timer1.initialize(5000);
   Timer1.attachInterrupt(redFading);
   count = 0;
-  initializeInterrupt();
+  initializeInterruptStart();
   actualState = START;
   randomSeed(analogRead(0));
 }
@@ -46,7 +47,7 @@ void loop() {
       Serial.println("Welcome to GMB! Press B1 to Start");
       break;
     case GAME:
-      actualNumber = getRandomNumber();
+      game();
       break;
   }
 }
