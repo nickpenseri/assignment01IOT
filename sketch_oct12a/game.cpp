@@ -2,84 +2,120 @@
 #include "initialization.h"
 #include "Arduino.h"
 #include "interrupt.h"
+#include "start.h"
 
 extern bool green_led_state[];
 extern int green_led_pin[];
 extern int button_pin[];
 int actualNumber;
 int score;
+int difficultyChosen;
+double diffFactor;
+extern state actualState;
 
+long maxTime;
 long lastFirstPress;
 long lastSecondPress;
 long lastThirdPress;
 long lastFourthPress;
 
 extern state actualState;
-int getRandomNumber(){
-  return random(0,16);
+int getRandomNumber() {
+  return random(0, 16);
 }
 
-void pushButton(int buttonIndex){
-  green_led_state[buttonIndex]=!green_led_state[buttonIndex];
-  if(green_led_state[buttonIndex]){
-    digitalWrite(green_led_pin[buttonIndex],HIGH);
-  }else{
-    digitalWrite(green_led_pin[buttonIndex],LOW);
+void pushButton(int buttonIndex) {
+  green_led_state[buttonIndex] = !green_led_state[buttonIndex];
+  if (green_led_state[buttonIndex]) {
+    digitalWrite(green_led_pin[buttonIndex], HIGH);
+  } else {
+    digitalWrite(green_led_pin[buttonIndex], LOW);
   }
 }
-void pushedFirstButton()
-{
+void pushedFirstButton() {
   long ts = millis();
-  if (ts - lastFirstPress > DEBOUNCE_TIME)
-  {
+  if (ts - lastFirstPress > DEBOUNCE_TIME) {
     pushButton(3);
-    lastFirstPress = ts; 
+    lastFirstPress = ts;
   }
 }
-void pushedSecondButton()
-{
+void pushedSecondButton() {
   long ts = millis();
-  if (ts - lastSecondPress > DEBOUNCE_TIME)
-  {
+  if (ts - lastSecondPress > DEBOUNCE_TIME) {
     pushButton(2);
     lastSecondPress = ts;
   }
 }
 
-void pushedThirdButton()
-{
+void pushedThirdButton() {
   long ts = millis();
-  if (ts - lastThirdPress > DEBOUNCE_TIME)
-  {
+  if (ts - lastThirdPress > DEBOUNCE_TIME) {
     pushButton(1);
     lastThirdPress = ts;
   }
 }
 
-void pushedFourthButton()
-{
+void pushedFourthButton() {
   long ts = millis();
-  if (ts - lastFourthPress > DEBOUNCE_TIME)
-  {
+  if (ts - lastFourthPress > DEBOUNCE_TIME) {
     pushButton(0);
     lastFourthPress = ts;
   }
 }
-void initializeGame() {
+
+void initializeGame(int difficulty) {
+  difficultyChosen = difficulty;
+  diffFactor = BASE_FACTOR - (difficulty * 0.10);
   lastFirstPress = millis();
   lastSecondPress = millis();
   lastThirdPress = millis();
   lastFourthPress = millis();
-  for(int i = 0; i < LEDS_NUMBER; i++) {
-    digitalWrite(green_led_pin[i], LOW);
-    green_led_state[i] = false;
-  }
+  turnOffLeds();
   initializeInterruptGame();
   score = 0;
-}
-void game(){
-  initializeGame();
-  actualState=SLEEP;
+  maxTime = FIRST_ROUND_TIME;
 }
 
+void gameRound() {
+  actualNumber = random(0, 16);
+  delay(1000);
+  Serial.println("Numero estratto: " + String(actualNumber));
+  delay(maxTime);
+  if (checkCorrectGuess()) {
+    score += SCORE_INCREASE;
+    Serial.println("GOOD! Score:" + String(score));
+    maxTime *= diffFactor;
+    turnOffLeds();
+  } else {
+    turnOffLeds();
+    endGame();
+  }
+}
 
+void endGame() {
+  digitalWrite(RED_PIN, HIGH);
+  delay(1000);
+  digitalWrite(RED_PIN, LOW);
+  Serial.println("Game Over - Final Score: " + String(score));
+  delay(10000);
+  actualState = START;
+  initializeStartState();
+}
+
+bool checkCorrectGuess() {
+  int guess = 0;
+  noInterrupts();
+  for (int i = 0; i < LEDS_NUMBER; i++) {
+    guess += green_led_state[i] ? (1 << (3 - i)) : 0;  // Usa lo shift bit a sinistra per calcolare la potenza di 2
+  }
+  interrupts();
+  Serial.println(guess);
+  return guess == actualNumber;
+}
+
+void turnOffLeds() {
+  for (int i = 0; i < LEDS_NUMBER; i++) {
+    green_led_state[i] = false;
+    digitalWrite(green_led_pin[i], LOW);
+  }
+}

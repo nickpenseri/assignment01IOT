@@ -9,18 +9,9 @@ int green_led_pin[] = { FOURTH_GREEN_PIN, THIRD_GREEN_PIN, SECOND_GREEN_PIN, FIR
 int button_pin[] = { FOURTH_BUTTON_PIN, THIRD_BUTTON_PIN, SECOND_BUTTON_PIN, FIRST_BUTTON_PIN };
 bool green_led_state[] = { false, false, false, false };
 
-int fading_Amount;
-int brightness;
-int count;
 volatile state actualState;
 
-void redFading() {
-  brightness += fading_Amount;
-  analogWrite(RED_PIN, brightness);
-  if (brightness == 255 || brightness == 0) {
-    fading_Amount = -fading_Amount;
-  }
-}
+
 
 void setup() {
   Serial.begin(9600);
@@ -30,13 +21,7 @@ void setup() {
   }
   pinMode(RED_PIN, OUTPUT);
   pinMode(POTENTIOMETER_PIN, INPUT);
-  fading_Amount = 5;
-  brightness = 0;
-  Timer1.initialize(5000);
-  Timer1.attachInterrupt(redFading);
-  count = 0;
-  initializeInterruptStart();
-  actualState = START;
+  initializeStartState();
   randomSeed(analogRead(0));
 }
 
@@ -47,7 +32,7 @@ void loop() {
       Serial.println("Welcome to GMB! Press B1 to Start");
       break;
     case GAME:
-      game();
+      gameRound();
       break;
   }
 }

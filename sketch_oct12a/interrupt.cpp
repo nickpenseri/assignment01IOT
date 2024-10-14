@@ -6,8 +6,13 @@
 extern int button_pin[];
 
 void initializeInterruptStart(){
+  disableInterrupt(button_pin[0]);
+  disableInterrupt(button_pin[1]);
+  disableInterrupt(button_pin[2]);
+  disableInterrupt(button_pin[3]);
   enableInterrupt(FOURTH_BUTTON_PIN, startGame, RISING);
 }
+
 void initializeInterruptGame(){
   disableInterrupt(FOURTH_BUTTON_PIN);
   enableInterrupt(button_pin[0], pushedFourthButton, RISING);

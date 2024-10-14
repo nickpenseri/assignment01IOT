@@ -20,6 +20,13 @@
 #define MAX_NUMBER 15
 #define T1_TIMER 20000
 #define DEBOUNCE_TIME 300
+#define FIRST_ROUND_TIME 15000
+
+#define SCORE_INCREASE 100
+#define BASE_FACTOR 1
+
+#define MIN_DIFFICULTY 1
+#define MAX_DIFFICULTY 4
 
 typedef enum States{START, SLEEP, GAME } state; 
 

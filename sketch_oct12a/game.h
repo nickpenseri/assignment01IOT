@@ -7,5 +7,9 @@ void pushedFirstButton();
 void pushedSecondButton();
 void pushedThirdButton();
 void pushedFourthButton();
-void game();
+void gameRound();
+void initializeGame(int difficulty);
+bool checkCorrectGuess();
+void turnOffLeds();
+void endGame();
 #endif
