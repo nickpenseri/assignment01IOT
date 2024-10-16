@@ -3,5 +3,6 @@
 
 void initializeInterruptStart();
 void initializeInterruptGame();
+void initializeInterruptSleep();
 
 #endif

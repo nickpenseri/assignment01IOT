@@ -28,6 +28,8 @@
 #define MIN_DIFFICULTY 1
 #define MAX_DIFFICULTY 4
 
+
+
 typedef enum States{START, SLEEP, GAME } state; 
 
 #endif

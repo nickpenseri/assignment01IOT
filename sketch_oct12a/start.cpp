@@ -7,11 +7,13 @@
 #include "output.h"
 
 extern state actualState;
+extern long startTime;
 
 int fading_Amount = 5;
 int brightness = 0;
 
 void initializeStartState() {
+  startTime = millis();
   Timer1.initialize(10000);
   Timer1.attachInterrupt(redFading);
   initializeInterruptStart();
@@ -33,6 +35,7 @@ void redFading() {
 void startGame(){
   Timer1.stop();
   actualState = GAME;
+  delay(1000);
   initializeGame(readDifficulty());
 }
 
@@ -55,7 +58,6 @@ int mapDiffculty(int potValue){
 }
 int readDifficulty(){
   int valueRead = analogRead(POTENTIOMETER_PIN);
-  Serial.println(valueRead);
   int difficulty = mapDiffculty(valueRead);
   return difficulty;
 }

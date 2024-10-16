@@ -64,6 +64,7 @@ void pushedFourthButton() {
 }
 
 void initializeGame(int difficulty) {
+  
   difficultyChosen = difficulty;
   diffFactor = BASE_FACTOR - (difficulty * 0.10);
   lastFirstPress = millis();
@@ -72,16 +73,19 @@ void initializeGame(int difficulty) {
   lastFourthPress = millis();
   turnOffLeds();
   initializeInterruptGame();
+  
   score = 0;
   maxTime = FIRST_ROUND_TIME;
 }
 
 void gameRound() {
   actualNumber = random(0, 16);
+  clearOutput();
+  writeMessage("Go!! ");
   delay(1000);
   Serial.println( "Difficoltà scelta: "+String(difficultyChosen));
-  clearOutput();
-  writeMessage("Numero estratto: " + String(actualNumber));
+  setNextLine();
+  writeMessage("Extracted number: " + String(actualNumber));
 
   delay(maxTime);
   if (checkCorrectGuess()) {
