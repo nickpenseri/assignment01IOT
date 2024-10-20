@@ -9,7 +9,7 @@
 extern state actualState;
 extern long startTime;
 
-int fading_Amount = 5;
+int fadingAmount = 5;
 int brightness = 0;
 
 void initializeStartState() {
@@ -25,10 +25,10 @@ void initializeStartState() {
 }
 
 void redFading() {
-  brightness += fading_Amount;
+  brightness += fadingAmount;
   analogWrite(RED_PIN, brightness);
   if (brightness == 250 || brightness == 0) {
-    fading_Amount = -fading_Amount;
+    fadingAmount = -fadingAmount;
   }
 }
 
@@ -56,6 +56,7 @@ int mapDiffculty(int potValue){
   }
 
 }
+
 int readDifficulty(){
   int valueRead = analogRead(POTENTIOMETER_PIN);
   int difficulty = mapDiffculty(valueRead);

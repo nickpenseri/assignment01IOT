@@ -7,15 +7,19 @@ void outputInit(){
   lcd.init();
   lcd.backlight();
 }
+
 void writeMessage(String message){
   lcd.print(message);
 }
+
 void setNextLine(){
   lcd.setCursor(0,2);
 }
+
 void resetCursor(){
   lcd.setCursor(0, 0);
 }
+
 void clearOutput(){
   lcd.clear();
   resetCursor();

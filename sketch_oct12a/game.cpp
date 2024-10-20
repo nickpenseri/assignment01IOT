@@ -5,9 +5,9 @@
 #include "start.h"
 #include "output.h"
 
-extern bool green_led_state[];
-extern int green_led_pin[];
-extern int button_pin[];
+extern bool greenLedState[];
+extern int greenLedPin[];
+extern int buttonPin[];
 int actualNumber;
 int score;
 int difficultyChosen;
@@ -25,13 +25,14 @@ int getRandomNumber() {
 }
 
 void pushButton(int buttonIndex) {
-  green_led_state[buttonIndex] = !green_led_state[buttonIndex];
-  if (green_led_state[buttonIndex]) {
-    digitalWrite(green_led_pin[buttonIndex], HIGH);
+  greenLedState[buttonIndex] = !greenLedState[buttonIndex];
+  if (greenLedState[buttonIndex]) {
+    digitalWrite(greenLedPin[buttonIndex], HIGH);
   } else {
-    digitalWrite(green_led_pin[buttonIndex], LOW);
+    digitalWrite(greenLedPin[buttonIndex], LOW);
   }
 }
+
 void pushedFirstButton() {
   long ts = millis();
   if (ts - lastFirstPress > DEBOUNCE_TIME) {
@@ -39,6 +40,7 @@ void pushedFirstButton() {
     lastFirstPress = ts;
   }
 }
+
 void pushedSecondButton() {
   long ts = millis();
   if (ts - lastSecondPress > DEBOUNCE_TIME) {
@@ -118,7 +120,7 @@ bool checkCorrectGuess() {
   int guess = 0;
   noInterrupts();
   for (int i = 0; i < LEDS_NUMBER; i++) {
-    guess += green_led_state[i] ? (1 << ((LEDS_NUMBER-1) - i)) : 0;  // Usa lo shift bit a sinistra per calcolare la potenza di 2
+    guess += greenLedState[i] ? (1 << ((LEDS_NUMBER-1) - i)) : 0;
   }
   interrupts();
   Serial.println(guess);
@@ -127,7 +129,7 @@ bool checkCorrectGuess() {
 
 void turnOffLeds() {
   for (int i = 0; i < LEDS_NUMBER; i++) {
-    green_led_state[i] = false;
-    digitalWrite(green_led_pin[i], LOW);
+    greenLedState[i] = false;
+    digitalWrite(greenLedPin[i], LOW);
   }
 }
