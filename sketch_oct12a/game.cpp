@@ -94,6 +94,7 @@ void gameRound() {
     score += SCORE_INCREASE;
     clearOutput();
     writeMessage("GOOD! Score:" + String(score));
+    delay(2000);
     maxTime *= diffFactor;
     turnOffLeds();
   } else {
